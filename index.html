@@ -6,6 +6,42 @@
     <title>Snake Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    /* CSS */
+.control-btn {
+    position: absolute;
+    width: 50px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    background-color: #ccc;
+    border: none;
+    border-radius: 50%;
+    opacity: 0.7;
+    cursor: pointer;
+    z-index: 2; /* Ensure buttons overlay each other */
+}
+
+#leftBtn {
+    left: 400px; /* Adjust positioning as needed */
+    bottom:40px; /* Adjust positioning as needed */
+}
+
+#upBtn {
+    left: 450px;
+    bottom: 74px;
+}
+
+#rightBtn {
+    right:400px; /* Adjust positioning as needed */
+    bottom:40px; 
+    / /* Adjust positioning as needed */
+}
+
+#downBtn {
+    left: calc(50% - 25px); /* Adjust positioning as needed */
+    bottom: 20px; /* Adjust positioning as needed */
+}
+
+</style>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <div id="overlay" class="overlay">
