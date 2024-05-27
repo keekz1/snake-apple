@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 
 // Set up game variables
 const grid = 20;
+let gameOver = false;
 const snake = {
     x: grid * 10,
     y: grid * 10,
@@ -19,18 +20,23 @@ const apple = {
 
 // Main game loop
 function main() {
-    clearCanvas();
-    moveSnake();
-    drawSnake();
-    drawApple();
+    if (gameOver) return;
+    setTimeout(function() {
+        clearCanvas();
+        moveSnake();
+        drawSnake();
+        drawApple();
 
-    // Check for collisions
-    if (checkCollision()) {
-        resetGame();
-    }
+        // Check for collisions
+        if (checkCollision()) {
+            drawGameOver();
+            gameOver = true; // Stop the game loop
+            return;
+        }
 
-    // Repeat
-    requestAnimationFrame(main);
+        // Repeat
+        requestAnimationFrame(main);
+    }, 100); // Adjust the speed by changing the interval (e.g., 100 ms)
 }
 
 // Event listener for keyboard input
@@ -49,6 +55,40 @@ document.addEventListener('keydown', function(event) {
         snake.dx = 0;
         snake.dy = grid;
     }
+});
+
+// Event listeners for touch input
+document.getElementById('leftBtn').addEventListener('click', function() {
+    if (snake.dx === 0) {
+        snake.dx = -grid;
+        snake.dy = 0;
+    }
+});
+document.getElementById('upBtn').addEventListener('click', function() {
+    if (snake.dy === 0) {
+        snake.dx = 0;
+        snake.dy = -grid;
+    }
+});
+document.getElementById('rightBtn').addEventListener('click', function() {
+    if (snake.dx === 0) {
+        snake.dx = grid;
+        snake.dy = 0;
+    }
+});
+document.getElementById('downBtn').addEventListener('click', function() {
+    if (snake.dy === 0) {
+        snake.dx = 0;
+        snake.dy = grid;
+    }
+});
+
+// Event listener for "Try Again" button
+document.getElementById('tryAgainBtn').addEventListener('click', function() {
+    gameOver = false;
+    resetGame();
+    document.getElementById('overlay').style.display = 'none';
+    requestAnimationFrame(main);
 });
 
 // Function to clear canvas
@@ -124,49 +164,11 @@ function resetGame() {
     apple.x = Math.floor(Math.random() * 20) * grid;
     apple.y = Math.floor(Math.random() * 20) * grid;
 }
-// Main game loop with specified frame rate
 
-
-// Define a variable to track whether the game is over
-let gameOver = false;
-
-// Main game loop
-function main() {
-    if (!gameOver) {
-        setTimeout(function() {
-            clearCanvas();
-            moveSnake();
-            drawSnake();
-            drawApple();
-
-            // Check for collisions
-            if (checkCollision()) {
-                gameOver = true; // Set game over flag
-                drawGameOver();
-                return; // Stop the game loop
-            }
-
-            // Repeat
-            main();
-        }, 1000 / 10); // Adjust the speed by changing the interval (e.g., 1000 / 10 for 10 frames per second)
-    }
-}
 // Function to draw the "Game Over" message
 function drawGameOver() {
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '30px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2);
-    overlay.style.display = 'flex'; // Show overlay
+    document.getElementById('overlay').style.display = 'flex';
 }
 
-// Event listener for the "Try Again" button
-tryAgainBtn.addEventListener('click', function() {
-    overlay.style.display = 'none'; // Hide overlay
-    resetGame();
-    gameOver = false; // Reset game over flag
-    main(); // Restart the game
-});
-
 // Start the game
-main();
+requestAnimationFrame(main);
